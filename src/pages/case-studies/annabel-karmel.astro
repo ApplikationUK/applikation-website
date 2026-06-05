@@ -1,0 +1,363 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Annabel Karmel — Case Study · Applikation"
+  description="Reimagining the digital experience for one of the UK's most trusted baby and toddler nutrition brands — a personalised platform that helps parents discover recipes, track nutrition, and build healthy habits."
+>
+
+<style>
+  .cs-hero { background:var(--ink); color:#fff; position:relative; overflow:hidden; padding:140px 0 80px; }
+  .cs-hero::before { content:''; position:absolute; inset:0; background-image: radial-gradient(circle at 1.5px 1.5px, rgba(255,255,255,0.06) 1.5px, transparent 0), radial-gradient(800px 600px at 20% 20%, rgba(255,91,46,0.10), transparent 60%), radial-gradient(700px 500px at 80% 80%, rgba(100,60,180,0.12), transparent 60%); background-size:28px 28px, 100% 100%, 100% 100%; pointer-events:none; }
+  .crumb { display:inline-flex; align-items:center; gap:10px; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.5); text-decoration:none; margin-bottom:32px; transition:color 0.18s; }
+  .crumb:hover { color:var(--accent); }
+  .cs-hero-grid { display:grid; grid-template-columns:1.4fr 1fr; gap:64px; align-items:end; }
+  .cs-hero-tag { display:inline-flex; align-items:center; gap:12px; padding:7px 14px; border:1px solid rgba(255,255,255,0.14); font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.7); margin-bottom:28px; }
+  .cs-hero-tag .dot { width:6px; height:6px; border-radius:50%; background:var(--accent); }
+  .cs-hero-title { font-size:clamp(44px,6.4vw,88px); font-weight:700; line-height:0.98; letter-spacing:-0.045em; color:#fff; margin-bottom:24px; }
+  .cs-hero-sub { font-size:19px; line-height:1.55; color:rgba(255,255,255,0.62); max-width:540px; }
+  .cs-meta { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.08); }
+  .cs-meta-item { background:var(--ink); padding:22px 24px; }
+  .cs-meta-label { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(255,255,255,0.4); margin-bottom:8px; }
+  .cs-meta-value { font-family:'DM Sans',sans-serif; font-size:16px; font-weight:600; color:#fff; letter-spacing:-0.015em; line-height:1.4; }
+
+  .cs-hero-image { margin-top:64px; position:relative; height:520px; background:var(--ink-2); border:1px solid rgba(255,255,255,0.08); overflow:hidden; }
+  .cs-hero-image::before { content:''; position:absolute; inset:0; background-image: linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px); background-size:60px 60px; }
+  .cs-hero-image-mark { position:absolute; top:20px; left:20px; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.4); z-index:2; }
+  .cs-hero-image-tag { position:absolute; bottom:20px; right:20px; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); z-index:2; }
+
+  /* Phone mockup */
+  .phone-group { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); display:flex; gap:24px; align-items:center; }
+  .device-frame { width:240px; height:480px; background:#0A0E1A; border:7px solid #1A2238; border-radius:32px; box-shadow:0 30px 80px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.06); overflow:hidden; flex-shrink:0; position:relative; }
+  .device-frame::before { content:''; position:absolute; top:7px; left:50%; transform:translateX(-50%); width:70px; height:16px; background:#06080F; border-radius:0 0 10px 10px; z-index:2; }
+  .device-screen { position:absolute; inset:0; background:#0F1426; display:flex; flex-direction:column; padding:30px 14px 16px; }
+  .app-bar { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+  .app-bar-title { font-family:'DM Sans',sans-serif; font-size:16px; font-weight:700; color:#fff; }
+  .app-bar-age { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent); }
+  .recipe-card { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); padding:12px; margin-bottom:8px; }
+  .recipe-tag { font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent); margin-bottom:4px; }
+  .recipe-name { font-family:'DM Sans',sans-serif; font-size:12px; font-weight:600; color:#fff; margin-bottom:6px; }
+  .recipe-thumb { height:40px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:center; }
+  .recipe-thumb span { font-family:'JetBrains Mono',monospace; font-size:8px; color:rgba(255,255,255,0.3); letter-spacing:0.1em; text-transform:uppercase; }
+  .nutrition-bar { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); padding:10px 12px; margin-bottom:6px; }
+  .nutrition-label { font-family:'JetBrains Mono',monospace; font-size:8px; color:rgba(255,255,255,0.4); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:6px; display:flex; justify-content:space-between; }
+  .nutrition-track { height:3px; background:rgba(255,255,255,0.08); }
+  .nutrition-fill { height:100%; background:rgba(255,91,46,0.7); }
+  .app-cta { margin-top:auto; background:var(--accent); color:#fff; padding:10px; font-family:'DM Sans',sans-serif; font-size:11px; font-weight:600; text-align:center; border-radius:4px; }
+
+  /* Stats panel beside phone */
+  .phone-stats { display:flex; flex-direction:column; gap:12px; }
+  .phone-stat-card { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); padding:20px 24px; width:200px; }
+  .phone-stat-card.accent-border { border-color:rgba(255,91,46,0.3); background:rgba(255,91,46,0.05); }
+  .phone-stat-label { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.4); margin-bottom:8px; }
+  .phone-stat-card.accent-border .phone-stat-label { color:rgba(255,91,46,0.7); }
+  .phone-stat-num { font-family:'DM Sans',sans-serif; font-size:36px; font-weight:700; letter-spacing:-0.04em; color:#fff; line-height:1; }
+  .phone-stat-sub { font-family:'JetBrains Mono',monospace; font-size:9px; color:rgba(255,255,255,0.4); letter-spacing:0.08em; text-transform:uppercase; margin-top:4px; }
+
+  /* Stat bar */
+  .stat-bar { background:var(--ink); color:#fff; border-top:1px solid rgba(255,255,255,0.06); border-bottom:1px solid rgba(255,255,255,0.06); }
+  .stat-bar-inner { max-width:1240px; margin:0 auto; display:grid; grid-template-columns:repeat(4,1fr); }
+  .stat-cell { padding:40px 32px; border-right:1px solid rgba(255,255,255,0.06); }
+  .stat-cell:last-child { border-right:none; }
+  .stat-label { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(255,255,255,0.4); margin-bottom:14px; }
+  .stat-num { font-family:'DM Sans',sans-serif; font-size:48px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:#fff; margin-bottom:8px; }
+  .stat-num .accent { color:var(--accent); }
+  .stat-desc { font-size:12px; color:rgba(255,255,255,0.5); line-height:1.5; }
+
+  /* Sections */
+  .cs-section { padding:100px 0; }
+  .cs-section-head { display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:end; margin-bottom:56px; }
+  .cs-section-title { font-size:clamp(32px,4vw,48px); line-height:1.05; letter-spacing:-0.035em; }
+  .cs-section-sub { font-size:16px; line-height:1.65; color:var(--ink-soft); max-width:460px; }
+
+  /* Challenge / Approach */
+  .ca-section { background:var(--canvas-soft); }
+  .ca-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  .ca-card { background:var(--canvas); border:1px solid var(--line); padding:40px; position:relative; }
+  .ca-card.dark { background:var(--ink); color:#fff; border-color:rgba(255,255,255,0.06); overflow:hidden; }
+  .ca-card.dark::before { content:''; position:absolute; inset:0; background-image:radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0); background-size:24px 24px; pointer-events:none; }
+  .ca-card > * { position:relative; }
+  .ca-card-eyebrow { font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.14em; color:var(--accent); margin-bottom:18px; }
+  .ca-card-title { font-family:'DM Sans',sans-serif; font-size:26px; font-weight:700; letter-spacing:-0.025em; margin-bottom:18px; line-height:1.2; }
+  .ca-card.dark .ca-card-title { color:#fff; }
+  .ca-card p { font-size:15px; line-height:1.7; color:var(--ink-soft); margin-bottom:14px; }
+  .ca-card.dark p { color:rgba(255,255,255,0.65); }
+  .ca-card ul { list-style:none; padding:0; margin-top:20px; border-top:1px solid var(--line); counter-reset:ca-counter; }
+  .ca-card.dark ul { border-top-color:rgba(255,255,255,0.08); }
+  .ca-card li { padding:14px 0; border-bottom:1px solid var(--line); display:grid; grid-template-columns:32px 1fr; gap:12px; align-items:start; font-size:14px; color:var(--ink); line-height:1.55; counter-increment:ca-counter; }
+  .ca-card.dark li { border-bottom-color:rgba(255,255,255,0.08); color:rgba(255,255,255,0.85); }
+  .ca-card li::before { content:counter(ca-counter, decimal-leading-zero); font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--accent); letter-spacing:0.1em; }
+
+  /* Build grid */
+  .build { background:var(--canvas); }
+  .build-grid { display:grid; grid-template-columns:repeat(2,1fr); border-top:1px solid var(--line); border-left:1px solid var(--line); }
+  .build-item { padding:40px 36px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); transition:background 0.2s; }
+  .build-item:hover { background:var(--canvas-soft); }
+  .build-item:hover .build-icon { background:var(--ink); border-color:var(--ink); }
+  .build-item:hover .build-icon svg { stroke:#fff; }
+  .build-num { font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.14em; color:var(--accent); margin-bottom:24px; }
+  .build-icon { width:48px; height:48px; border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; margin-bottom:24px; background:var(--canvas); transition:background 0.2s, border-color 0.2s; }
+  .build-icon svg { width:22px; height:22px; stroke:var(--ink); stroke-width:1.4; fill:none; transition:stroke 0.2s; }
+  .build-title { font-family:'DM Sans',sans-serif; font-size:19px; font-weight:700; letter-spacing:-0.02em; margin-bottom:10px; }
+  .build-desc { font-size:14px; color:var(--ink-soft); line-height:1.65; }
+
+  /* Pull quote */
+  .quote-section { background:var(--ink); color:#fff; padding:100px 0; position:relative; overflow:hidden; }
+  .quote-section::before { content:''; position:absolute; inset:0; background-image: radial-gradient(circle at 1.5px 1.5px, rgba(255,255,255,0.05) 1.5px, transparent 0), radial-gradient(800px 600px at 10% 50%, rgba(255,91,46,0.1), transparent 60%); background-size:28px 28px, 100% 100%; pointer-events:none; }
+  .quote-inner { max-width:900px; margin:0 auto; padding:0 48px; position:relative; }
+  .quote-mark { font-family:'DM Sans',sans-serif; font-size:96px; line-height:0.6; color:var(--accent); margin-bottom:16px; }
+  .quote-text { font-family:'DM Sans',sans-serif; font-size:clamp(28px,3.5vw,44px); font-weight:500; line-height:1.25; letter-spacing:-0.025em; color:#fff; margin-bottom:40px; }
+  .quote-text em { color:var(--accent); font-style:normal; }
+  .quote-attribution { display:grid; grid-template-columns:56px 1fr; gap:18px; align-items:center; padding-top:32px; border-top:1px solid rgba(255,255,255,0.1); }
+  .quote-avatar { width:56px; height:56px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.14); display:flex; align-items:center; justify-content:center; font-family:'DM Sans',sans-serif; font-size:18px; font-weight:700; color:var(--accent); }
+  .quote-name { font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700; color:#fff; letter-spacing:-0.01em; margin-bottom:4px; }
+  .quote-role { font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.5); }
+
+  /* CTA */
+  .cta-section { background:var(--ink); color:#fff; padding:120px 0; position:relative; overflow:hidden; }
+  .cta-section::before { content:''; position:absolute; inset:0; background-image: radial-gradient(circle at 1.5px 1.5px, rgba(255,255,255,0.05) 1.5px, transparent 0), radial-gradient(900px 600px at 0% 100%, rgba(255,91,46,0.10), transparent 60%), radial-gradient(700px 500px at 100% 0%, rgba(70,90,170,0.16), transparent 60%); background-size:28px 28px, 100% 100%, 100% 100%; pointer-events:none; }
+  .cta-inner { max-width:900px; margin:0 auto; padding:0 48px; position:relative; text-align:center; }
+  .cta-eyebrow { display:inline-flex; align-items:center; gap:10px; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.55); margin-bottom:28px; }
+  .cta-eyebrow .bar { width:24px; height:1px; background:currentColor; opacity:0.4; }
+  .cta-eyebrow .num { color:var(--accent); }
+  .cta-title { font-family:'DM Sans',sans-serif; font-size:clamp(36px,5vw,64px); font-weight:700; line-height:1.05; letter-spacing:-0.04em; color:#fff; margin-bottom:24px; }
+  .cta-title .accent { color:var(--accent); }
+  .cta-sub { font-size:18px; line-height:1.6; color:rgba(255,255,255,0.6); max-width:580px; margin:0 auto 40px; }
+  .cta-actions { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+
+  @media (max-width: 960px) {
+    .cs-hero-grid, .ca-grid, .build-grid, .stat-bar-inner { grid-template-columns:1fr; }
+    .cs-section-head { grid-template-columns:1fr; gap:24px; }
+    .phone-group { flex-direction:column; }
+    .phone-stats { flex-direction:row; flex-wrap:wrap; }
+    .phone-stat-card { width:auto; flex:1; min-width:140px; }
+  }
+</style>
+
+<!-- HERO -->
+<section class="cs-hero">
+  <div class="container">
+    <a href="/#work" class="crumb"><span>←</span> All work / Selected projects</a>
+
+    <div class="cs-hero-grid">
+      <div>
+        <div class="cs-hero-tag"><span class="dot"></span> CASE STUDY · 03 / 03</div>
+        <h1 class="cs-hero-title">Annabel<br />Karmel.</h1>
+        <p class="cs-hero-sub">Reimagining the digital experience for one of the UK's most trusted baby and toddler nutrition brands — a personalised platform helping 240,000 parents every month.</p>
+      </div>
+      <div class="cs-meta">
+        <div class="cs-meta-item">
+          <div class="cs-meta-label">// Client</div>
+          <div class="cs-meta-value">Annabel Karmel Group</div>
+        </div>
+        <div class="cs-meta-item">
+          <div class="cs-meta-label">// Sector</div>
+          <div class="cs-meta-value">Consumer App<br />Baby &amp; Toddler Nutrition</div>
+        </div>
+        <div class="cs-meta-item">
+          <div class="cs-meta-label">// Year</div>
+          <div class="cs-meta-value">2022 — Present</div>
+        </div>
+        <div class="cs-meta-item">
+          <div class="cs-meta-label">// Services</div>
+          <div class="cs-meta-value">Product Development<br />UX Research · Innovation</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cs-hero-image">
+      <div class="cs-hero-image-mark">// PRODUCT DESIGN · iOS &amp; ANDROID</div>
+      <div class="cs-hero-image-tag">4.8★ · 12K+ REVIEWS</div>
+
+      <div class="phone-group">
+        <div class="device-frame">
+          <div class="device-screen">
+            <div class="app-bar">
+              <div class="app-bar-title">Today's picks</div>
+              <div class="app-bar-age">Age: 8mo</div>
+            </div>
+            <div class="recipe-card">
+              <div class="recipe-tag">// LUNCH</div>
+              <div class="recipe-name">Butternut Squash Purée</div>
+              <div class="recipe-thumb"><span>// recipe image</span></div>
+            </div>
+            <div class="recipe-card">
+              <div class="recipe-tag">// DINNER</div>
+              <div class="recipe-name">Sweet Potato &amp; Lentil</div>
+              <div class="recipe-thumb"><span>// recipe image</span></div>
+            </div>
+            <div class="nutrition-bar">
+              <div class="nutrition-label"><span>// NUTRITION TODAY</span><span style="color:var(--accent);">82%</span></div>
+              <div class="nutrition-track"><div class="nutrition-fill" style="width:82%;"></div></div>
+            </div>
+            <div class="app-cta">View full plan →</div>
+          </div>
+        </div>
+
+        <div class="phone-stats">
+          <div class="phone-stat-card">
+            <div class="phone-stat-label">// Engagement</div>
+            <div class="phone-stat-num">2×</div>
+            <div class="phone-stat-sub">vs pre-launch</div>
+          </div>
+          <div class="phone-stat-card">
+            <div class="phone-stat-label">// App Store</div>
+            <div class="phone-stat-num">4.8★</div>
+            <div class="phone-stat-sub">12k+ reviews</div>
+          </div>
+          <div class="phone-stat-card accent-border">
+            <div class="phone-stat-label">// Monthly users</div>
+            <div class="phone-stat-num">240K</div>
+            <div class="phone-stat-sub">active parents</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STAT BAR -->
+<div class="stat-bar">
+  <div class="stat-bar-inner">
+    <div class="stat-cell">
+      <div class="stat-label">// 01 Engagement</div>
+      <div class="stat-num">2<span class="accent">×</span></div>
+      <div class="stat-desc">Increase in digital engagement vs. baseline</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label">// 02 App Store</div>
+      <div class="stat-num">4.8<span class="accent">★</span></div>
+      <div class="stat-desc">With over 12,000 verified reviews</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label">// 03 Scale</div>
+      <div class="stat-num">240<span class="accent">K</span></div>
+      <div class="stat-desc">Monthly active users within year one</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label">// 04 Retention</div>
+      <div class="stat-num">68<span class="accent">%</span></div>
+      <div class="stat-desc">Day-30 retention vs. 31% category average</div>
+    </div>
+  </div>
+</div>
+
+<!-- CHALLENGE / APPROACH -->
+<section class="cs-section ca-section">
+  <div class="container">
+    <div class="cs-section-head">
+      <div>
+        <div class="eyebrow"><span class="bar"></span><span class="num">02</span><span>Challenge &amp; approach</span></div>
+        <h2 class="cs-section-title" style="margin-top:20px;">A trusted brand.<br />A digital presence<br />that didn't match.</h2>
+      </div>
+      <p class="cs-section-sub">Parents were coming to Annabel Karmel for trusted guidance — and leaving because the app couldn't deliver it clearly enough.</p>
+    </div>
+
+    <div class="ca-grid">
+      <div class="ca-card">
+        <div class="ca-card-eyebrow">// THE CHALLENGE</div>
+        <h3 class="ca-card-title">Content depth. Navigation chaos.</h3>
+        <p>Annabel Karmel's recipes and nutritional expertise were genuinely world-class. The digital platform wasn't. Content was hard to navigate, personalisation was non-existent, and parents were churning before they found the value.</p>
+        <ul>
+          <li><span><strong>No personalisation</strong> — every parent saw the same content, regardless of their child's age, stage, or dietary needs.</span></li>
+          <li><span><strong>Content overload</strong> — thousands of recipes with no intelligent surfacing meant parents spent more time searching than cooking.</span></li>
+          <li><span><strong>Retention gap</strong> — without a habit loop, users engaged once and didn't return. The app hadn't kept pace with what parents expected.</span></li>
+        </ul>
+      </div>
+      <div class="ca-card dark">
+        <div class="ca-card-eyebrow">// OUR APPROACH</div>
+        <h3 class="ca-card-title">Start with the parent. Build from there.</h3>
+        <p>We ran discovery sessions with parents across different stages — 4-month-olds through toddlers — to understand what they actually needed day-to-day. The product brief changed significantly as a result.</p>
+        <ul>
+          <li><span><strong>Age-stage architecture</strong> — content filtered and surfaced by the child's developmental stage, not a generic search bar.</span></li>
+          <li><span><strong>Daily meal planning</strong> — a simple daily planner that removes the decision fatigue of "what do I feed them today?"</span></li>
+          <li><span><strong>Nutrition tracking</strong> — at-a-glance visibility into whether the child is hitting nutritional milestones, surfaced without making parents feel judged.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT WE BUILT -->
+<section class="cs-section build">
+  <div class="container">
+    <div class="cs-section-head">
+      <div>
+        <div class="eyebrow"><span class="bar"></span><span class="num">03</span><span>What we built</span></div>
+        <h2 class="cs-section-title" style="margin-top:20px;">Personalised.<br />Practical. Loved.</h2>
+      </div>
+      <p class="cs-section-sub">A platform that feels like it was built for your child, not every child. Six core features, all centred on reducing the mental load of feeding a baby.</p>
+    </div>
+
+    <div class="build-grid">
+      <div class="build-item">
+        <div class="build-num">// FEATURE 01</div>
+        <div class="build-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="4"/></svg></div>
+        <h3 class="build-title">Recipe discovery engine</h3>
+        <p class="build-desc">Smart filtering by age, allergens, prep time, and ingredients you already have. The engine learns from what parents save and rate, surfacing better suggestions over time.</p>
+      </div>
+      <div class="build-item">
+        <div class="build-num">// FEATURE 02</div>
+        <div class="build-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        <h3 class="build-title">Meal planner</h3>
+        <p class="build-desc">A weekly planner that auto-populates with age-appropriate suggestions, supports drag-and-drop customisation, and generates a shopping list at the tap of a button.</p>
+      </div>
+      <div class="build-item">
+        <div class="build-num">// FEATURE 03</div>
+        <div class="build-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-7"/></svg></div>
+        <h3 class="build-title">Nutrition tracker</h3>
+        <p class="build-desc">Developmental milestone tracking with at-a-glance nutritional coverage — designed to reassure, not stress. The system flags gaps gently and suggests recipes to address them.</p>
+      </div>
+      <div class="build-item">
+        <div class="build-num">// FEATURE 04</div>
+        <div class="build-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h3 class="build-title">Community &amp; advice</h3>
+        <p class="build-desc">Curated guidance from Annabel and her nutritionist team, surfaced contextually based on the child's age. A community layer lets parents share experiences and tips.</p>
+      </div>
+      <div class="build-item">
+        <div class="build-num">// FEATURE 05</div>
+        <div class="build-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
+        <h3 class="build-title">Shop integration</h3>
+        <p class="build-desc">One-tap add-to-basket for Annabel's product range, surfaced contextually when a recipe uses a complementary product. Revenue without disrupting the parent experience.</p>
+      </div>
+      <div class="build-item">
+        <div class="build-num">// FEATURE 06</div>
+        <div class="build-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M10 18h4"/></svg></div>
+        <h3 class="build-title">iOS &amp; Android apps</h3>
+        <p class="build-desc">Native apps with shared design system and business logic. Fast, offline-capable for recipe viewing, and built to App Store and Play Store guidelines for featured placement.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PULL QUOTE -->
+<section class="quote-section">
+  <div class="quote-inner">
+    <div class="eyebrow on-dark" style="margin-bottom:32px;"><span class="bar"></span><span class="num">06</span><span>In their words</span></div>
+    <div class="quote-mark">"</div>
+    <p class="quote-text">They didn't behave like an agency. They behaved like <em>part of our team</em> — and shipped things our internal crew had been stuck on for a year.</p>
+    <div class="quote-attribution">
+      <div class="quote-avatar">AK</div>
+      <div>
+        <div class="quote-name">Annabel Karmel</div>
+        <div class="quote-role">// Founder · Annabel Karmel Group</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <div class="cta-eyebrow"><span class="bar"></span><span class="num">→</span><span>Start a project</span></div>
+    <h2 class="cta-title">Got a product that's<br />ready for a <span class="accent">rethink</span>?</h2>
+    <p class="cta-sub">If your digital experience isn't doing justice to your brand, we'd love to hear about it. No pitch — just a conversation.</p>
+    <div class="cta-actions">
+      <a href="/#contact" class="btn btn-primary">Start a conversation <span class="arrow">→</span></a>
+      <a href="/#work" class="btn btn-ghost-dark">More case studies</a>
+    </div>
+  </div>
+</section>
+
+</BaseLayout>

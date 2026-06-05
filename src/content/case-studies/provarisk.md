@@ -7,7 +7,7 @@ stats:
     label: "Faster risk identification vs. manual"
   - num: "60%"
     label: "Reduction in manual analyst time"
-hasPage: false
+hasPage: true
 order: 2
 ---
 

@@ -7,7 +7,7 @@ stats:
     label: "Increase in digital engagement"
   - num: "4.8★"
     label: "App Store rating"
-hasPage: false
+hasPage: true
 order: 3
 ---
 

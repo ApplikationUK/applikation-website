@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+function formatDate(d: Date) {
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+---
+
+<BaseLayout title={`${post.data.title} — Applikation`} description={post.data.excerpt}>
+
+<!-- Article hero -->
+<div style="padding-top:92px; background:var(--ink); color:#fff; border-bottom:1px solid rgba(255,255,255,0.06);">
+  <div style="max-width:900px; margin:0 auto; padding:80px 48px 64px;">
+    <a href="/blog" class="crumb" style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.5);text-decoration:none;margin-bottom:36px;transition:color 0.18s;">
+      <span>←</span> All Insights
+    </a>
+    <div class="insight-cat" style="margin-bottom:20px;">// {post.data.category}</div>
+    <h1 style="font-family:'DM Sans',sans-serif;font-size:clamp(36px,5vw,64px);font-weight:700;letter-spacing:-0.04em;line-height:1.05;color:#fff;margin-bottom:24px;">{post.data.title}</h1>
+    <p style="font-size:18px;line-height:1.6;color:rgba(255,255,255,0.6);max-width:640px;margin-bottom:40px;">{post.data.excerpt}</p>
+    <div style="display:flex;align-items:center;gap:16px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.45);">
+      <span>{post.data.author}</span>
+      <span style="width:3px;height:3px;border-radius:50%;background:currentColor;"></span>
+      <span>{formatDate(post.data.pubDate)}</span>
+      <span style="width:3px;height:3px;border-radius:50%;background:currentColor;"></span>
+      <span>{post.data.readTime} min read</span>
+    </div>
+  </div>
+</div>
+
+<!-- Article body -->
+<div style="background:var(--canvas); padding:80px 0 120px;">
+  <div class="blog-body" style="max-width:740px; margin:0 auto; padding:0 48px;">
+    <Content />
+  </div>
+</div>
+
+<!-- CTA -->
+<div style="background:var(--ink); padding:80px 0; text-align:center; position:relative; overflow:hidden;">
+  <div style="position:absolute;inset:0;background-image:radial-gradient(circle at 1.5px 1.5px, rgba(255,255,255,0.05) 1.5px, transparent 0);background-size:28px 28px;pointer-events:none;"></div>
+  <div style="position:relative; max-width:640px; margin:0 auto; padding:0 48px;">
+    <p style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:20px;">// Ready to talk?</p>
+    <h2 style="font-family:'DM Sans',sans-serif;font-size:clamp(32px,4vw,52px);font-weight:700;letter-spacing:-0.04em;color:#fff;margin-bottom:16px;line-height:1.05;">Got a challenge<br />we can help with?</h2>
+    <p style="font-size:16px;color:rgba(255,255,255,0.6);margin-bottom:36px;line-height:1.6;">No sales pitch. Just an honest conversation about where you want to go.</p>
+    <a href="/#contact" class="btn btn-primary">Start a conversation <span class="arrow">→</span></a>
+  </div>
+</div>
+
+</BaseLayout>

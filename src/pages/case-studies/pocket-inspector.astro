@@ -1,0 +1,435 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Pocket Inspector — Case Study · Applikation"
+  description="A mobile-first inspection tool that replaced paper-based processes for field engineers — with AI-assisted reporting, real-time dashboards, and offline-first architecture."
+>
+
+<style>
+  /* ===== HERO ===== */
+  .cs-hero { background:var(--ink); color:#fff; position:relative; overflow:hidden; padding:140px 0 80px; }
+  .cs-hero::before { content:''; position:absolute; inset:0; background-image: radial-gradient(circle at 1.5px 1.5px, rgba(255,255,255,0.06) 1.5px, transparent 0), radial-gradient(800px 500px at 80% 20%, rgba(255,91,46,0.10), transparent 60%), radial-gradient(700px 600px at 10% 90%, rgba(70,90,170,0.16), transparent 60%); background-size:28px 28px, 100% 100%, 100% 100%; pointer-events:none; }
+  .crumb { display:inline-flex; align-items:center; gap:10px; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.5); text-decoration:none; margin-bottom:32px; transition:color 0.18s; }
+  .crumb:hover { color:var(--accent); }
+  .cs-hero-grid { display:grid; grid-template-columns:1.4fr 1fr; gap:64px; align-items:end; }
+  .cs-hero-tag { display:inline-flex; align-items:center; gap:12px; padding:7px 14px; border:1px solid rgba(255,255,255,0.14); font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.7); margin-bottom:28px; }
+  .cs-hero-tag .dot { width:6px; height:6px; border-radius:50%; background:var(--accent); }
+  .cs-hero-title { font-size:clamp(44px, 6.4vw, 88px); font-weight:700; line-height:0.98; letter-spacing:-0.045em; color:#fff; margin-bottom:24px; }
+  .cs-hero-sub { font-size:19px; line-height:1.55; color:rgba(255,255,255,0.62); max-width:540px; }
+  .cs-meta { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.08); }
+  .cs-meta-item { background:var(--ink); padding:22px 24px; }
+  .cs-meta-label { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(255,255,255,0.4); margin-bottom:8px; }
+  .cs-meta-value { font-family:'DM Sans',sans-serif; font-size:16px; font-weight:600; color:#fff; letter-spacing:-0.015em; line-height:1.4; }
+
+  /* ===== HERO IMAGE ===== */
+  .cs-hero-image { margin-top:64px; position:relative; height:520px; background:var(--ink-2); border:1px solid rgba(255,255,255,0.08); overflow:hidden; }
+  .cs-hero-image::before { content:''; position:absolute; inset:0; background-image: linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px); background-size:60px 60px; }
+  .cs-hero-image-mark { position:absolute; top:20px; left:20px; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.4); }
+  .cs-hero-image-tag { position:absolute; bottom:20px; right:20px; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); }
+  .device-frame { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:280px; height:580px; background:#0A0E1A; border:8px solid #1A2238; border-radius:36px; box-shadow:0 30px 80px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.06); overflow:hidden; }
+  .device-frame::before { content:''; position:absolute; top:8px; left:50%; transform:translateX(-50%); width:80px; height:18px; background:#06080F; border-radius:0 0 12px 12px; z-index:2; }
+  .device-screen { position:absolute; inset:0; background:#0F1426; display:flex; flex-direction:column; padding:36px 18px 24px; }
+  .ds-title { font-family:'DM Sans',sans-serif; font-size:18px; font-weight:700; color:#fff; margin-bottom:4px; }
+  .ds-sub { font-family:'JetBrains Mono',monospace; font-size:9px; color:rgba(255,255,255,0.4); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:18px; }
+  .ds-card { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); padding:12px 14px; margin-bottom:8px; }
+  .ds-card-tag { font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); margin-bottom:4px; }
+  .ds-card-title { font-size:11px; font-weight:600; color:#fff; margin-bottom:4px; }
+  .ds-card-line { height:4px; background:rgba(255,255,255,0.1); margin-bottom:4px; }
+  .ds-card-line.short { width:60%; }
+  .ds-cta { margin-top:auto; padding:12px; background:var(--accent); color:#fff; font-family:'DM Sans',sans-serif; font-size:12px; font-weight:600; text-align:center; }
+  .device-side-tag { position:absolute; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.4); }
+  .device-side-tag.left { top:50%; left:60px; transform:translateY(-50%) rotate(-90deg); transform-origin:left center; }
+  .device-side-tag.right { top:50%; right:60px; transform:translateY(-50%) rotate(90deg); transform-origin:right center; }
+  .device-corner-line { position:absolute; width:80px; height:1px; background:rgba(255,91,46,0.4); }
+  .device-corner-line.tl { top:80px; left:60px; }
+  .device-corner-line.br { bottom:80px; right:60px; }
+
+  /* ===== STAT BAR ===== */
+  .stat-bar { background:var(--ink); color:#fff; border-top:1px solid rgba(255,255,255,0.06); border-bottom:1px solid rgba(255,255,255,0.06); }
+  .stat-bar-inner { max-width:1240px; margin:0 auto; display:grid; grid-template-columns:repeat(4,1fr); }
+  .stat-cell { padding:40px 32px; border-right:1px solid rgba(255,255,255,0.06); }
+  .stat-cell:last-child { border-right:none; }
+  .stat-label { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(255,255,255,0.4); margin-bottom:14px; }
+  .stat-num { font-family:'DM Sans',sans-serif; font-size:48px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:#fff; margin-bottom:8px; }
+  .stat-num .accent { color:var(--accent); }
+  .stat-desc { font-size:12px; color:rgba(255,255,255,0.5); line-height:1.5; }
+
+  /* ===== SECTIONS ===== */
+  .cs-section { padding:100px 0; }
+  .cs-section-head { display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:end; margin-bottom:56px; }
+  .cs-section-title { font-size:clamp(32px,4vw,48px); line-height:1.05; letter-spacing:-0.035em; }
+  .cs-section-sub { font-size:16px; line-height:1.65; color:var(--ink-soft); max-width:460px; }
+
+  /* ===== CHALLENGE / APPROACH ===== */
+  .ca-section { background:var(--canvas-soft); }
+  .ca-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  .ca-card { background:var(--canvas); border:1px solid var(--line); padding:40px; position:relative; }
+  .ca-card.dark { background:var(--ink); color:#fff; border-color:rgba(255,255,255,0.06); overflow:hidden; }
+  .ca-card.dark::before { content:''; position:absolute; inset:0; background-image:radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0); background-size:24px 24px; pointer-events:none; }
+  .ca-card > * { position:relative; }
+  .ca-card-eyebrow { font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.14em; color:var(--accent); margin-bottom:18px; }
+  .ca-card-title { font-family:'DM Sans',sans-serif; font-size:26px; font-weight:700; letter-spacing:-0.025em; margin-bottom:18px; line-height:1.2; }
+  .ca-card.dark .ca-card-title { color:#fff; }
+  .ca-card p { font-size:15px; line-height:1.7; color:var(--ink-soft); margin-bottom:14px; }
+  .ca-card.dark p { color:rgba(255,255,255,0.65); }
+  .ca-card ul { list-style:none; padding:0; margin-top:20px; border-top:1px solid var(--line); counter-reset:ca-counter; }
+  .ca-card.dark ul { border-top-color:rgba(255,255,255,0.08); }
+  .ca-card li { padding:14px 0; border-bottom:1px solid var(--line); display:grid; grid-template-columns:32px 1fr; gap:12px; align-items:start; font-size:14px; color:var(--ink); line-height:1.55; counter-increment:ca-counter; }
+  .ca-card.dark li { border-bottom-color:rgba(255,255,255,0.08); color:rgba(255,255,255,0.85); }
+  .ca-card li::before { content:counter(ca-counter, decimal-leading-zero); font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--accent); letter-spacing:0.1em; }
+
+  /* ===== BUILD GRID ===== */
+  .build { background:var(--canvas); }
+  .build-grid { display:grid; grid-template-columns:repeat(2,1fr); border-top:1px solid var(--line); border-left:1px solid var(--line); }
+  .build-item { padding:40px 36px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); transition:background 0.2s; }
+  .build-item:hover { background:var(--canvas-soft); }
+  .build-item:hover .build-icon { background:var(--ink); border-color:var(--ink); }
+  .build-item:hover .build-icon svg { stroke:#fff; }
+  .build-num { font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.14em; color:var(--accent); margin-bottom:24px; }
+  .build-icon { width:48px; height:48px; border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; margin-bottom:24px; background:var(--canvas); transition:background 0.2s, border-color 0.2s; }
+  .build-icon svg { width:22px; height:22px; stroke:var(--ink); stroke-width:1.4; fill:none; transition:stroke 0.2s; }
+  .build-title { font-family:'DM Sans',sans-serif; font-size:19px; font-weight:700; letter-spacing:-0.02em; margin-bottom:10px; }
+  .build-desc { font-size:14px; color:var(--ink-soft); line-height:1.65; }
+
+  /* ===== TIMELINE ===== */
+  .timeline-section { background:var(--canvas-soft); }
+  .timeline { position:relative; border-top:1px solid var(--line); }
+  .timeline-row { display:grid; grid-template-columns:200px 60px 1fr; gap:32px; padding:36px 0; border-bottom:1px solid var(--line); align-items:start; }
+  .timeline-week { font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-mute); padding-top:4px; }
+  .timeline-week .num { color:var(--accent); }
+  .timeline-marker { position:relative; height:100%; display:flex; justify-content:center; }
+  .timeline-marker::before { content:''; width:2px; background:var(--line-strong); position:absolute; top:-36px; bottom:-36px; left:50%; transform:translateX(-50%); }
+  .timeline-row:first-child .timeline-marker::before { top:0; }
+  .timeline-row:last-child .timeline-marker::before { bottom:0; }
+  .timeline-marker .dot { width:14px; height:14px; background:var(--canvas); border:2px solid var(--ink); border-radius:50%; position:relative; z-index:1; margin-top:6px; transition:background 0.2s, border-color 0.2s; }
+  .timeline-row:hover .timeline-marker .dot { background:var(--accent); border-color:var(--accent); }
+  .timeline-title { font-family:'DM Sans',sans-serif; font-size:22px; font-weight:700; letter-spacing:-0.02em; margin-bottom:8px; }
+  .timeline-desc { font-size:15px; color:var(--ink-soft); line-height:1.65; max-width:640px; }
+  .timeline-tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:14px; }
+  .timeline-tag { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-soft); padding:4px 10px; border:1px solid var(--line); background:var(--canvas); }
+
+  /* ===== PULL QUOTE ===== */
+  .quote-section { background:var(--ink); color:#fff; padding:100px 0; position:relative; overflow:hidden; }
+  .quote-section::before { content:''; position:absolute; inset:0; background-image: radial-gradient(circle at 1.5px 1.5px, rgba(255,255,255,0.05) 1.5px, transparent 0), radial-gradient(800px 600px at 90% 50%, rgba(255,91,46,0.1), transparent 60%); background-size:28px 28px, 100% 100%; pointer-events:none; }
+  .quote-inner { max-width:900px; margin:0 auto; padding:0 48px; position:relative; }
+  .quote-mark { font-family:'DM Sans',sans-serif; font-size:96px; line-height:0.6; color:var(--accent); margin-bottom:16px; }
+  .quote-text { font-family:'DM Sans',sans-serif; font-size:clamp(28px,3.5vw,44px); font-weight:500; line-height:1.25; letter-spacing:-0.025em; color:#fff; margin-bottom:40px; }
+  .quote-text em { color:var(--accent); font-style:normal; }
+  .quote-attribution { display:grid; grid-template-columns:56px 1fr; gap:18px; align-items:center; padding-top:32px; border-top:1px solid rgba(255,255,255,0.1); }
+  .quote-avatar { width:56px; height:56px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.14); display:flex; align-items:center; justify-content:center; font-family:'DM Sans',sans-serif; font-size:18px; font-weight:700; color:var(--accent); }
+  .quote-name { font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700; color:#fff; letter-spacing:-0.01em; margin-bottom:4px; }
+  .quote-role { font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.5); }
+
+  /* ===== CTA ===== */
+  .cta-section { background:var(--ink); color:#fff; padding:120px 0; position:relative; overflow:hidden; }
+  .cta-section::before { content:''; position:absolute; inset:0; background-image: radial-gradient(circle at 1.5px 1.5px, rgba(255,255,255,0.05) 1.5px, transparent 0), radial-gradient(900px 600px at 0% 0%, rgba(255,91,46,0.10), transparent 60%), radial-gradient(700px 500px at 100% 100%, rgba(70,90,170,0.16), transparent 60%); background-size:28px 28px, 100% 100%, 100% 100%; pointer-events:none; }
+  .cta-inner { max-width:900px; margin:0 auto; padding:0 48px; position:relative; text-align:center; }
+  .cta-eyebrow { display:inline-flex; align-items:center; gap:10px; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.55); margin-bottom:28px; }
+  .cta-eyebrow .bar { width:24px; height:1px; background:currentColor; opacity:0.4; }
+  .cta-eyebrow .num { color:var(--accent); }
+  .cta-title { font-family:'DM Sans',sans-serif; font-size:clamp(36px,5vw,64px); font-weight:700; line-height:1.05; letter-spacing:-0.04em; color:#fff; margin-bottom:24px; }
+  .cta-title .accent { color:var(--accent); }
+  .cta-sub { font-size:18px; line-height:1.6; color:rgba(255,255,255,0.6); max-width:580px; margin:0 auto 40px; }
+  .cta-actions { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+
+  @media (max-width: 960px) {
+    .cs-hero-grid, .ca-grid, .build-grid, .stat-bar-inner { grid-template-columns:1fr; }
+    .timeline-row { grid-template-columns:1fr; gap:8px; }
+    .timeline-marker { display:none; }
+    .cs-section-head { grid-template-columns:1fr; gap:24px; }
+  }
+</style>
+
+<!-- HERO -->
+<section class="cs-hero">
+  <div class="container">
+    <a href="/#work" class="crumb"><span>←</span> All work / Selected projects</a>
+
+    <div class="cs-hero-grid">
+      <div>
+        <div class="cs-hero-tag"><span class="dot"></span> CASE STUDY · 01 / 03</div>
+        <h1 class="cs-hero-title">Pocket<br />Inspector.</h1>
+        <p class="cs-hero-sub">A mobile-first inspection tool that replaced paper-based processes for field engineers — with AI-assisted reporting, real-time dashboards, and offline-first architecture.</p>
+      </div>
+      <div class="cs-meta">
+        <div class="cs-meta-item">
+          <div class="cs-meta-label">// Client</div>
+          <div class="cs-meta-value">Pocket Inspector Ltd.</div>
+        </div>
+        <div class="cs-meta-item">
+          <div class="cs-meta-label">// Sector</div>
+          <div class="cs-meta-value">Field Operations<br />Industrial Services</div>
+        </div>
+        <div class="cs-meta-item">
+          <div class="cs-meta-label">// Year</div>
+          <div class="cs-meta-value">2024 — Present</div>
+        </div>
+        <div class="cs-meta-item">
+          <div class="cs-meta-label">// Services</div>
+          <div class="cs-meta-value">Product Development<br />AI Strategy · Automation</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cs-hero-image">
+      <div class="cs-hero-image-mark">// HERO IMAGE — REPLACE WITH PRODUCT SHOT</div>
+      <div class="cs-hero-image-tag">v2.4 · LIVE</div>
+      <div class="device-side-tag left">FIELD APP</div>
+      <div class="device-side-tag right">iOS · ANDROID</div>
+      <div class="device-corner-line tl"></div>
+      <div class="device-corner-line br"></div>
+      <div class="device-frame">
+        <div class="device-screen">
+          <div class="ds-title">Daily Inspection</div>
+          <div class="ds-sub">// SITE 412 · NW REGION</div>
+          <div class="ds-card">
+            <div class="ds-card-tag">// SECTION 01</div>
+            <div class="ds-card-title">Structural integrity</div>
+            <div class="ds-card-line"></div>
+            <div class="ds-card-line short"></div>
+          </div>
+          <div class="ds-card">
+            <div class="ds-card-tag">// SECTION 02</div>
+            <div class="ds-card-title">Safety compliance</div>
+            <div class="ds-card-line"></div>
+            <div class="ds-card-line short"></div>
+          </div>
+          <div class="ds-card">
+            <div class="ds-card-tag">// AI-ASSIST</div>
+            <div class="ds-card-title">Generate report</div>
+            <div class="ds-card-line short"></div>
+          </div>
+          <div class="ds-cta">Submit →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STAT BAR -->
+<div class="stat-bar">
+  <div class="stat-bar-inner">
+    <div class="stat-cell">
+      <div class="stat-label">// 01 Time saved</div>
+      <div class="stat-num">70<span class="accent">%</span></div>
+      <div class="stat-desc">Reduction in report completion time</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label">// 02 Accuracy</div>
+      <div class="stat-num">98<span class="accent">%</span></div>
+      <div class="stat-desc">vs. paper-based baseline</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label">// 03 Adoption</div>
+      <div class="stat-num">340<span class="accent">+</span></div>
+      <div class="stat-desc">Field engineers onboarded</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label">// 04 Scale</div>
+      <div class="stat-num">12k<span class="accent">/mo</span></div>
+      <div class="stat-desc">Inspections processed</div>
+    </div>
+  </div>
+</div>
+
+<!-- CHALLENGE / APPROACH -->
+<section class="cs-section ca-section">
+  <div class="container">
+    <div class="cs-section-head">
+      <div>
+        <div class="eyebrow"><span class="bar"></span><span class="num">02</span><span>Challenge &amp; approach</span></div>
+        <h2 class="cs-section-title" style="margin-top:20px;">A 30-year-old<br />process. Replaced.</h2>
+      </div>
+      <p class="cs-section-sub">Replacing paper isn't a tech problem — it's a behaviour problem. Our job was to build something engineers would actually want to use.</p>
+    </div>
+
+    <div class="ca-grid">
+      <div class="ca-card">
+        <div class="ca-card-eyebrow">// THE CHALLENGE</div>
+        <h3 class="ca-card-title">Paper, transcription, &amp; days of latency.</h3>
+        <p>Inspection reports were handwritten on multi-part carbon forms, photographed on personal phones, and faxed or transcribed back at the office days after the visit. Three problems compounded.</p>
+        <ul>
+          <li><span><strong>Data integrity</strong> — every transcription introduced errors, lost photos, or missed sections.</span></li>
+          <li><span><strong>Latency</strong> — by the time head office saw issues, engineers had moved on to the next site.</span></li>
+          <li><span><strong>Adoption risk</strong> — previous attempts at digital tools had failed because they were built for the office, not the field.</span></li>
+        </ul>
+      </div>
+      <div class="ca-card dark">
+        <div class="ca-card-eyebrow">// OUR APPROACH</div>
+        <h3 class="ca-card-title">Offline-first. Field-tested. AI where it matters.</h3>
+        <p>We embedded with engineers for the first three weeks — riding along on inspections, reviewing failed digital attempts, and rebuilding the workflow from the ground up.</p>
+        <ul>
+          <li><span><strong>Offline-first architecture</strong> — every screen works without signal; sync happens when it can.</span></li>
+          <li><span><strong>One-handed UX</strong> — designed for gloves, rain, and ladders; tap targets sized for real conditions.</span></li>
+          <li><span><strong>AI-assisted reporting</strong> — narrative generation from structured input, not the other way around.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT WE BUILT -->
+<section class="cs-section build">
+  <div class="container">
+    <div class="cs-section-head">
+      <div>
+        <div class="eyebrow"><span class="bar"></span><span class="num">03</span><span>What we built</span></div>
+        <h2 class="cs-section-title" style="margin-top:20px;">A toolkit that<br />works in the rain.</h2>
+      </div>
+      <p class="cs-section-sub">Six core surfaces — three for the engineer, three for the back office. All connected. All tested in the field before we shipped a line of production code.</p>
+    </div>
+
+    <div class="build-grid">
+      <div class="build-item">
+        <div class="build-num">// FEATURE 01</div>
+        <div class="build-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M10 18h4"/></svg></div>
+        <h3 class="build-title">Mobile inspection app</h3>
+        <p class="build-desc">Native iOS &amp; Android, optimised for one-handed operation. Branching forms with photo capture, voice notes, and signature collection — all working offline.</p>
+      </div>
+      <div class="build-item">
+        <div class="build-num">// FEATURE 02</div>
+        <div class="build-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="4"/></svg></div>
+        <h3 class="build-title">AI report generation</h3>
+        <p class="build-desc">A custom-tuned model that turns structured field data into a polished, audit-ready narrative report — in under 10 seconds, with the engineer always in control of the final draft.</p>
+      </div>
+      <div class="build-item">
+        <div class="build-num">// FEATURE 03</div>
+        <div class="build-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-7"/></svg></div>
+        <h3 class="build-title">Real-time dashboard</h3>
+        <p class="build-desc">A live operations view for back-office teams — every inspection visible, flagged, and actionable the moment a sync completes from the field.</p>
+      </div>
+      <div class="build-item">
+        <div class="build-num">// FEATURE 04</div>
+        <div class="build-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg></div>
+        <h3 class="build-title">Sync engine &amp; conflict resolver</h3>
+        <p class="build-desc">A bespoke offline sync layer with deterministic conflict resolution — engineers never lose work, head office never sees stale data.</p>
+      </div>
+      <div class="build-item">
+        <div class="build-num">// FEATURE 05</div>
+        <div class="build-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><path d="M3 6h18M3 12h18M3 18h18"/></svg></div>
+        <h3 class="build-title">Form builder</h3>
+        <p class="build-desc">A drag-and-drop tool that lets the operations team launch new inspection types in hours, not weeks — without involving developers.</p>
+      </div>
+      <div class="build-item">
+        <div class="build-num">// FEATURE 06</div>
+        <div class="build-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+        <h3 class="build-title">Compliance audit trail</h3>
+        <p class="build-desc">Tamper-evident, timestamped, geo-located records of every inspection — meeting the strict regulatory requirements of critical infrastructure work.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="cs-section timeline-section">
+  <div class="container">
+    <div class="cs-section-head">
+      <div>
+        <div class="eyebrow"><span class="bar"></span><span class="num">05</span><span>Process timeline</span></div>
+        <h2 class="cs-section-title" style="margin-top:20px;">From kickoff<br />to live in 14 weeks.</h2>
+      </div>
+      <p class="cs-section-sub">No big-bang launch. We shipped a usable v1 to a pilot crew in week eight, then iterated weekly with real engineers in real conditions.</p>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-row">
+        <div class="timeline-week"><span class="num">// W01–02</span><br />Discovery</div>
+        <div class="timeline-marker"><div class="dot"></div></div>
+        <div>
+          <h3 class="timeline-title">Field ride-alongs &amp; baseline mapping</h3>
+          <p class="timeline-desc">Two weeks shadowing engineers across three regions. We measured every step of the existing paper process — time, errors, drop-offs — and built a baseline against which everything would be compared.</p>
+          <div class="timeline-tags">
+            <span class="timeline-tag">12 ride-alongs</span>
+            <span class="timeline-tag">3 regions</span>
+            <span class="timeline-tag">8 stakeholder interviews</span>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-week"><span class="num">// W03–05</span><br />Design</div>
+        <div class="timeline-marker"><div class="dot"></div></div>
+        <div>
+          <h3 class="timeline-title">Prototype &amp; field validation</h3>
+          <p class="timeline-desc">Clickable prototypes tested with real engineers — in actual gloves, in actual rain. We threw away two design directions before locking the third.</p>
+          <div class="timeline-tags">
+            <span class="timeline-tag">Figma prototypes</span>
+            <span class="timeline-tag">14 user tests</span>
+            <span class="timeline-tag">3 design pivots</span>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-week"><span class="num">// W06–08</span><br />Pilot build</div>
+        <div class="timeline-marker"><div class="dot"></div></div>
+        <div>
+          <h3 class="timeline-title">First app in the field</h3>
+          <p class="timeline-desc">A 12-engineer pilot crew received the v1 app. Daily feedback loops, twice-weekly releases. The AI report module shipped behind a feature flag in week 8.</p>
+          <div class="timeline-tags">
+            <span class="timeline-tag">Pilot crew</span>
+            <span class="timeline-tag">2× weekly releases</span>
+            <span class="timeline-tag">AI flagged-on</span>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-week"><span class="num">// W09–12</span><br />Scale</div>
+        <div class="timeline-marker"><div class="dot"></div></div>
+        <div>
+          <h3 class="timeline-title">Rollout &amp; back-office build</h3>
+          <p class="timeline-desc">Region-by-region rollout to all 340 engineers. In parallel, we built the operations dashboard and trained the head-office team on the new workflow.</p>
+          <div class="timeline-tags">
+            <span class="timeline-tag">340 engineers</span>
+            <span class="timeline-tag">Dashboard live</span>
+            <span class="timeline-tag">Training delivered</span>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-week"><span class="num">// W13–14</span><br />Hand-off</div>
+        <div class="timeline-marker"><div class="dot"></div></div>
+        <div>
+          <h3 class="timeline-title">Embed, measure, hand the keys back</h3>
+          <p class="timeline-desc">Final two weeks focused on monitoring, documentation, and equipping the client's internal team to take ownership. We stayed embedded for ongoing feature work.</p>
+          <div class="timeline-tags">
+            <span class="timeline-tag">Runbooks</span>
+            <span class="timeline-tag">SLO dashboards</span>
+            <span class="timeline-tag">Ongoing partnership</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PULL QUOTE -->
+<section class="quote-section">
+  <div class="quote-inner">
+    <div class="eyebrow on-dark" style="margin-bottom:32px;"><span class="bar"></span><span class="num">07</span><span>In their words</span></div>
+    <div class="quote-mark">"</div>
+    <p class="quote-text">Applikation didn't just build us an app — they rebuilt the way our engineers work. <em>Within six weeks of rollout, we could see things in head office that we'd never had visibility on in twenty years.</em></p>
+    <div class="quote-attribution">
+      <div class="quote-avatar">RH</div>
+      <div>
+        <div class="quote-name">Rachel Hartley</div>
+        <div class="quote-role">// COO · Pocket Inspector Ltd.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <div class="cta-eyebrow"><span class="bar"></span><span class="num">→</span><span>Start a project</span></div>
+    <h2 class="cta-title">Got a paper process<br />that's <span class="accent">overdue</span> a rebuild?</h2>
+    <p class="cta-sub">If you've got a workflow stuck in the past, we'd love to talk about what a rebuild could unlock. No sales pitch — just an honest conversation.</p>
+    <div class="cta-actions">
+      <a href="/#contact" class="btn btn-primary">Start a conversation <span class="arrow">→</span></a>
+      <a href="/#work" class="btn btn-ghost-dark">More case studies</a>
+    </div>
+  </div>
+</section>
+
+</BaseLayout>

@@ -1,0 +1,604 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { caseStudyVisuals } from '../data/caseStudyVisuals';
+
+const allCaseStudies = await getCollection('case-studies');
+const caseStudies = allCaseStudies
+  .sort((a, b) => a.data.order - b.data.order)
+  .map(cs => ({
+    slug: cs.slug,
+    tag: cs.data.tag,
+    title: cs.data.title,
+    description: cs.data.description,
+    stats: cs.data.stats,
+    hasPage: cs.data.hasPage,
+    visualSvg: caseStudyVisuals[cs.slug] ?? '',
+  }));
+
+const allBlogPosts = await getCollection('blog');
+const blogPosts = allBlogPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const featuredPost = blogPosts.find(p => p.data.featured) ?? blogPosts[0];
+const sidebarPosts = blogPosts.filter(p => p.slug !== featuredPost.slug).slice(0, 3);
+
+function formatDate(d: Date) {
+  return d.toLocaleDateString('en-GB', { month: '2-digit', year: 'numeric' }).replace('/', ' / ');
+}
+---
+
+<BaseLayout title="Applikation Limited — Growth & Innovation Partner">
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <canvas id="hero-canvas"></canvas>
+
+  <div class="hero-meta-strip">
+    <div><span class="dot"></span> Now booking Q3 engagements</div>
+    <div>EST. 2014 — UK · IM</div>
+  </div>
+
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-tag">
+        <span class="dot"></span>
+        <span>Growth &amp; Innovation Partner</span>
+      </div>
+      <h1 class="hero-title">Bring us in.<br />We'll show you<br /><span class="accent">what's possible.</span></h1>
+      <p class="hero-sub">We embed inside your business — driving real innovation, building new revenue streams, and making AI work for you. Not theory. Results.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-primary">Start a conversation <span class="arrow">→</span></a>
+        <a href="#work" class="btn btn-ghost-dark">See our work</a>
+      </div>
+    </div>
+
+    <aside class="hero-side">
+      <div class="hero-side-label">
+        <span>// Live Index</span>
+        <span>2026.Q2</span>
+      </div>
+      <div class="hs-row"><div class="num">12+</div><div class="lbl">Years embedded with clients</div></div>
+      <div class="hs-row"><div class="num">40+</div><div class="lbl">Products shipped across industries</div></div>
+      <div class="hs-row"><div class="num">100%</div><div class="lbl">Year-one client retention</div></div>
+      <div class="hs-row"><div class="num">£28M</div><div class="lbl">New revenue unlocked for partners</div></div>
+      <div class="hs-foot"><span>Methodology</span><span class="arrow">→</span></div>
+    </aside>
+  </div>
+</section>
+
+<!-- TRUST STRIP -->
+<div class="trust on-dark">
+  <div class="trust-inner">
+    <div class="trust-left">
+      <div class="label">// Selected Partners</div>
+      <div class="copy">40+ brands &amp; partner agencies have trusted us with their hardest problems.</div>
+    </div>
+    <div class="trust-right">
+      <div class="logo-track" id="logo-track"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CLIENT VOICES -->
+<section class="voices on-dark">
+  <div class="voices-inner">
+    <div class="voices-head">
+      <div>
+        <div class="label"><span class="num">// </span>Client voices</div>
+        <p class="lead">Don't take our word for it — here's what it's like to have us embedded in the room.</p>
+      </div>
+      <div class="voices-nav">
+        <button id="voices-prev" aria-label="Previous reviews"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <button id="voices-next" aria-label="More reviews"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+    </div>
+    <div class="voices-track" id="voices-track">
+      <div class="voice">
+        <div class="voice-mark">"</div>
+        <p class="voice-text">They didn't behave like an agency. They behaved like <em>part of our team</em> — and shipped things our internal crew had been stuck on for a year.</p>
+        <div class="voice-attr">
+          <div class="voice-name">Annabel Karmel</div>
+          <div class="voice-role">Founder <span class="co">// Annabel Karmel</span></div>
+        </div>
+      </div>
+      <div class="voice">
+        <div class="voice-mark">"</div>
+        <p class="voice-text">We went from paper forms to <em>real-time visibility</em> across hundreds of field engineers. Adoption was the part I worried about — it turned out to be the easy part.</p>
+        <div class="voice-attr">
+          <div class="voice-name">Operations Director</div>
+          <div class="voice-role">Field Services <span class="co">// Pocket Inspector</span></div>
+        </div>
+      </div>
+      <div class="voice">
+        <div class="voice-mark">"</div>
+        <p class="voice-text">Practical, fast, and refreshingly free of jargon. They cut through the AI hype and built something that <em>actually moved our numbers</em>.</p>
+        <div class="voice-attr">
+          <div class="voice-name">Head of Product</div>
+          <div class="voice-role">Risk Platform <span class="co">// ProvaRISK</span></div>
+        </div>
+      </div>
+      <div class="voice">
+        <div class="voice-mark">"</div>
+        <p class="voice-text">They asked the questions our own team had stopped asking. The result was a product that finally <em>felt like us</em> — only sharper.</p>
+        <div class="voice-attr">
+          <div class="voice-name">Managing Director</div>
+          <div class="voice-role">Wellness Platform <span class="co">// Wellspace</span></div>
+        </div>
+      </div>
+      <div class="voice">
+        <div class="voice-mark">"</div>
+        <p class="voice-text">Most partners disappear after launch. This lot <em>stayed embedded</em>, kept measuring, and kept pushing the numbers in the right direction.</p>
+        <div class="voice-attr">
+          <div class="voice-name">Founder</div>
+          <div class="voice-role">Venue Tech <span class="co">// Value for Venues</span></div>
+        </div>
+      </div>
+      <div class="voice">
+        <div class="voice-mark">"</div>
+        <p class="voice-text">Calm, capable, and honest about trade-offs. We trusted them with our hardest problem and they <em>didn't flinch</em>.</p>
+        <div class="voice-attr">
+          <div class="voice-name">CTO</div>
+          <div class="voice-role">Security <span class="co">// Locus Security</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section services" id="services">
+  <div class="services-inner">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow"><span class="bar"></span><span class="num">01</span><span>What we do</span></div>
+        <h2 class="section-title" style="margin-top:20px;">Built to move<br />fast. Built to last.</h2>
+      </div>
+      <p class="section-sub">Four areas, one mission: give your organisation an unfair advantage through smart technology and fearless thinking — without the consultant theatre.</p>
+    </div>
+
+    <div class="services-grid">
+      <article class="service-card">
+        <div class="service-num">// 01 — STRATEGY</div>
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l3 3M16 16l3 3M5 19l3-3M16 8l3-3"/><circle cx="12" cy="12" r="4"/></svg>
+        </div>
+        <h3 class="service-title">AI Strategy</h3>
+        <p class="service-desc">We cut through the hype and build a practical AI roadmap that aligns with your goals — identifying where automation and intelligence can create the biggest impact.</p>
+        <div class="service-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M7 7h10v10"/></svg></div>
+      </article>
+      <article class="service-card">
+        <div class="service-num">// 02 — BUILD</div>
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 6h18M3 12h18M3 18h18M8 3v18M16 3v18"/></svg>
+        </div>
+        <h3 class="service-title">Product Development</h3>
+        <p class="service-desc">From early concept to launch-ready product, we design and build digital products that are intuitive, scalable, and deeply rooted in user needs.</p>
+        <div class="service-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M7 7h10v10"/></svg></div>
+      </article>
+      <article class="service-card">
+        <div class="service-num">// 03 — INNOVATE</div>
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M8 3l4 8 4-8M3 12h18M8 21l4-8 4 8"/></svg>
+        </div>
+        <h3 class="service-title">Development Innovation</h3>
+        <p class="service-desc">We don't just build to spec — we challenge assumptions and introduce modern engineering practices that future-proof what you're building today.</p>
+        <div class="service-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M7 7h10v10"/></svg></div>
+      </article>
+      <article class="service-card">
+        <div class="service-num">// 04 — AUTOMATE</div>
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg>
+        </div>
+        <h3 class="service-title">Process Automation</h3>
+        <p class="service-desc">Manual processes slow teams down and introduce risk. We identify, design, and implement automations that free your people up to focus on what matters.</p>
+        <div class="service-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M7 7h10v10"/></svg></div>
+      </article>
+    </div>
+
+    <div class="services-cta">
+      <div class="services-cta-inner">
+        <p><strong>We don't do cookie-cutter.</strong> Every engagement starts with understanding your business from the inside out — then we design solutions that fit.</p>
+        <a href="#contact" class="btn btn-primary">Talk to us <span class="arrow">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORK -->
+<section class="section work" id="work">
+  <div class="work-inner">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow"><span class="bar"></span><span class="num">02</span><span>Selected work</span></div>
+        <h2 class="section-title" style="margin-top:20px;">Real results,<br />real partners.</h2>
+      </div>
+      <p class="section-sub">We go beyond the brief — embedding with our clients to drive outcomes that actually move the needle.</p>
+    </div>
+
+    <div class="cs-featured" id="cs-featured"></div>
+
+    <div class="cs-controls">
+      <div class="cs-dots" id="cs-dots"></div>
+      <div class="cs-nav">
+        <button id="cs-prev" aria-label="Previous case study"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <button id="cs-next" aria-label="Next case study"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 6l6 6-6 6"/></svg></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI -->
+<section class="section ai-section">
+  <div class="ai-inner">
+    <div class="ai-content">
+      <div class="eyebrow on-dark"><span class="bar"></span><span class="num">03</span><span>AI &amp; Innovation</span></div>
+      <h2 class="section-title on-dark" style="margin-top:20px;">AI isn't something to fear.<br />It's your next <span style="color:var(--accent);">advantage</span>.</h2>
+      <p class="section-sub on-dark" style="margin-top:24px; max-width:520px;">Most businesses are overwhelmed by the pace of AI change. We help you cut through the noise — identifying real opportunities, building practical solutions, and embedding intelligence into the work you already do.</p>
+      <div style="margin-top:32px;">
+        <a href="#contact" class="btn btn-primary">Explore what's possible <span class="arrow">→</span></a>
+      </div>
+    </div>
+    <div class="ai-grid">
+      <div class="ai-card">
+        <div class="ai-num">// UNDERSTAND</div>
+        <div class="ai-card-title">AI Readiness Audit</div>
+        <p class="ai-card-desc">We assess where your business is today and map the highest-value AI opportunities.</p>
+      </div>
+      <div class="ai-card">
+        <div class="ai-num">// BUILD</div>
+        <div class="ai-card-title">Custom AI Solutions</div>
+        <p class="ai-card-desc">Not off-the-shelf. We design and build AI tools that fit your exact workflows.</p>
+      </div>
+      <div class="ai-card">
+        <div class="ai-num">// AUTOMATE</div>
+        <div class="ai-card-title">Intelligent Automation</div>
+        <p class="ai-card-desc">Replace manual, repetitive tasks with smart automations that scale with you.</p>
+      </div>
+      <div class="ai-card">
+        <div class="ai-num">// GROW</div>
+        <div class="ai-card-title">Revenue Innovation</div>
+        <p class="ai-card-desc">Identify and build entirely new revenue streams powered by technology and data.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="section process" id="process">
+  <div class="process-inner">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow"><span class="bar"></span><span class="num">04</span><span>How we work</span></div>
+        <h2 class="section-title" style="margin-top:20px;">Embedded.<br />Honest. Fast.</h2>
+      </div>
+      <p class="section-sub">We're not a vendor — we're an extension of your team. Four steps, no theatre, real momentum from week one.</p>
+    </div>
+
+    <div class="process-grid">
+      <div class="process-step">
+        <div class="process-num-line"></div>
+        <div class="process-num">// STEP 01</div>
+        <h3 class="process-title">Discovery</h3>
+        <p class="process-desc">We get under the skin of your business — your goals, blockers, and the biggest opportunities hiding in plain sight.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-num-line"></div>
+        <div class="process-num">// STEP 02</div>
+        <h3 class="process-title">Strategy</h3>
+        <p class="process-desc">A practical, prioritised plan — not a 60-page deck. Clear, actionable, built around your actual constraints.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-num-line"></div>
+        <div class="process-num">// STEP 03</div>
+        <h3 class="process-title">Build</h3>
+        <p class="process-desc">We move fast without cutting corners. Iterative delivery, constant feedback, real users involved from day one.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-num-line"></div>
+        <div class="process-num">// STEP 04</div>
+        <h3 class="process-title">Scale</h3>
+        <p class="process-desc">We don't disappear after launch. We stay embedded, measuring impact and continuing to drive growth.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section about" id="about">
+  <div class="about-inner">
+    <div class="about-founder-card">
+      <div class="afc-photo">
+        <image-slot id="founders" shape="rect" fit="cover" placeholder="Drop a photo of the co-founders"></image-slot>
+        <div class="photo-tag">// The co-founders</div>
+      </div>
+      <div class="afc-body">
+        <div class="afc-eyebrow"><span class="bar"></span><span>A word from the founders</span></div>
+        <p class="afc-quote">"We were tired of watching great businesses get handed slide decks instead of <em>real change</em>. So we built the partner we always wished we'd had — one that rolls up its sleeves, sits inside your team, and stays until the work actually ships."</p>
+        <div class="afc-sign">
+          <span class="afc-names">[Founder Name] &amp; [Founder Name]</span>
+          <span class="afc-roles">// Co-founders, Applikation</span>
+        </div>
+      </div>
+    </div>
+    <div class="about-text">
+      <div class="eyebrow"><span class="bar"></span><span class="num">05</span><span>About us</span></div>
+      <h2 class="section-title" style="margin-top:20px;">Your Growth &amp;<br />Innovation Partner.</h2>
+      <p class="section-sub" style="margin-top:20px; max-width:520px;">Applikation Limited was built on a simple belief: agencies should be invisible no more. We embed ourselves within businesses, drive real change from the inside, and bring the fearless thinking that internal teams sometimes can't.</p>
+
+      <div class="about-values">
+        <div class="about-value">
+          <div class="av-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg></div>
+          <div>
+            <div class="av-title">Results over reports</div>
+            <p class="av-desc">We measure ourselves by what actually changes in your business — not the quality of our slide decks.</p>
+          </div>
+        </div>
+        <div class="about-value">
+          <div class="av-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <div>
+            <div class="av-title">Partners, not vendors</div>
+            <p class="av-desc">We work inside your business, not at arm's length. Your wins are our wins.</p>
+          </div>
+        </div>
+        <div class="about-value">
+          <div class="av-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12l4-9 6 9-3 9-7-9z"/><path d="M9 3l3 9"/></svg></div>
+          <div>
+            <div class="av-title">Forefront of what's next</div>
+            <p class="av-desc">We stay ahead so you don't have to — bringing emerging technology and fresh thinking when it matters most.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INSIGHTS -->
+<section class="section insights">
+  <div class="insights-inner">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow"><span class="bar"></span><span class="num">06</span><span>Insights</span></div>
+        <h2 class="section-title" style="margin-top:20px;">Thinking out loud.</h2>
+      </div>
+      <p class="section-sub">Field notes from the work — practical takes on AI, product, and the messy reality of building things that ship.</p>
+    </div>
+
+    <div class="insights-grid">
+      <a href={`/blog/${featuredPost.slug}`} class="insight-feat" style="text-decoration:none;">
+        <div class="insight-feat-thumb">
+          <svg viewBox="0 0 700 280" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+            <defs><pattern id="ig-grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs>
+            <rect width="700" height="280" fill="url(#ig-grid)"/>
+            <circle cx="350" cy="140" r="120" fill="none" stroke="rgba(255,91,46,0.18)" stroke-width="1"/>
+            <circle cx="350" cy="140" r="80" fill="none" stroke="rgba(255,91,46,0.28)" stroke-width="1"/>
+            <circle cx="350" cy="140" r="40" fill="rgba(255,91,46,0.08)" stroke="rgba(255,91,46,0.5)" stroke-width="1.5"/>
+            <text x="350" y="138" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="rgba(255,91,46,0.9)" font-weight="600">AI</text>
+            <text x="350" y="155" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" fill="rgba(255,91,46,0.5)">// in-business</text>
+            <line x1="140" y1="60" x2="310" y2="140" stroke="rgba(255,91,46,0.15)" stroke-width="1" stroke-dasharray="4,3"/>
+            <line x1="560" y1="60" x2="390" y2="140" stroke="rgba(255,91,46,0.15)" stroke-width="1" stroke-dasharray="4,3"/>
+            <line x1="140" y1="220" x2="310" y2="140" stroke="rgba(255,91,46,0.15)" stroke-width="1" stroke-dasharray="4,3"/>
+            <line x1="560" y1="220" x2="390" y2="140" stroke="rgba(255,91,46,0.15)" stroke-width="1" stroke-dasharray="4,3"/>
+            <rect x="130" y="50" width="20" height="20" fill="rgba(255,255,255,0.12)"/>
+            <rect x="550" y="50" width="20" height="20" fill="rgba(255,255,255,0.12)"/>
+            <rect x="130" y="210" width="20" height="20" fill="rgba(255,255,255,0.12)"/>
+            <rect x="550" y="210" width="20" height="20" fill="rgba(255,91,46,0.5)"/>
+          </svg>
+        </div>
+        <div class="insight-feat-body">
+          <div class="insight-cat">// {featuredPost.data.category}</div>
+          <h3 class="insight-feat-title">{featuredPost.data.title}</h3>
+          <p class="insight-feat-excerpt">{featuredPost.data.excerpt}</p>
+          <div class="insight-meta">
+            <span>{featuredPost.data.author}</span>
+            <span class="insight-meta-sep"></span>
+            <span>{formatDate(featuredPost.data.pubDate)}</span>
+            <span class="insight-meta-sep"></span>
+            <span>{featuredPost.data.readTime} min read</span>
+          </div>
+        </div>
+      </a>
+
+      <div class="insight-list">
+        {sidebarPosts.map(post => (
+          <a href={`/blog/${post.slug}`} class="insight-card" style="text-decoration:none;">
+            <div class="insight-cat">// {post.data.category}</div>
+            <h3 class="insight-card-title">{post.data.title}</h3>
+            <p class="insight-card-excerpt">{post.data.excerpt}</p>
+            <div class="insight-card-meta">
+              <span>{formatDate(post.data.pubDate)} · {post.data.readTime} min</span>
+              <div class="insight-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M7 7h10v10"/></svg></div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section contact on-dark" id="contact">
+  <div class="contact-inner">
+    <div class="contact-info-section">
+      <div class="eyebrow on-dark"><span class="bar"></span><span class="num">07</span><span>Get in touch</span></div>
+      <h2 class="section-title on-dark" style="margin-top:20px;">Let's find out<br />what's possible.</h2>
+      <p class="section-sub on-dark" style="margin-top:20px;">No sales pitch. Just an honest conversation about where you want to go and how we might help you get there faster.</p>
+      <div class="contact-detail-list" style="margin-top:40px;">
+        <div class="contact-detail">
+          <div class="cd-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="0"/><path d="M3 7l9 6 9-6"/></svg></div>
+          <div>
+            <div class="cd-label">// Email</div>
+            <div class="cd-value">hello@applikation.co.uk</div>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="cd-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-7 8-13a8 8 0 0 0-16 0c0 6 8 13 8 13z"/><circle cx="12" cy="9" r="3"/></svg></div>
+          <div>
+            <div class="cd-label">// Isle of Man HQ</div>
+            <div class="cd-value">Floor 2, 14 Athol St<br />Douglas, IM1 1JA</div>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="cd-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-7 8-13a8 8 0 0 0-16 0c0 6 8 13 8 13z"/><circle cx="12" cy="9" r="3"/></svg></div>
+          <div>
+            <div class="cd-label">// Manchester HQ</div>
+            <div class="cd-value">Renold Building, SISTER<br />32a Altrincham St, M1 7JR</div>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="cd-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+          <div>
+            <div class="cd-label">// Response</div>
+            <div class="cd-value">Within 24 hours, by a human</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <form class="contact-form" id="contact-form">
+      <div class="contact-form-head">
+        <span class="label"><span class="accent-color">//</span> New enquiry</span>
+        <span class="label">Required *</span>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">First name *</label>
+          <input class="form-input" type="text" placeholder="Sarah" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last name *</label>
+          <input class="form-input" type="text" placeholder="Johnson" required />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Work email *</label>
+        <input class="form-input" type="email" placeholder="sarah@yourcompany.com" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Company</label>
+        <input class="form-input" type="text" placeholder="Your company name" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">I'm interested in</label>
+        <select class="form-select form-input">
+          <option value="">Select a service…</option>
+          <option>AI Strategy</option>
+          <option>Product Development</option>
+          <option>Development Innovation</option>
+          <option>Process Automation</option>
+          <option>Not sure yet — let's talk</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tell us about your challenge</label>
+        <textarea class="form-input" placeholder="What's the problem you're trying to solve?"></textarea>
+      </div>
+      <button type="submit" class="form-submit">Send message <span>→</span></button>
+    </form>
+    <div class="form-success" id="form-success" style="grid-column: 2;">
+      <h3>Message received.</h3>
+      <p>Thanks for reaching out — a real human will reply within 24 hours.</p>
+    </div>
+  </div>
+</section>
+
+<script define:vars={{ caseStudiesData: caseStudies }}>
+  // Hero canvas — connected node network
+  (function() {
+    const canvas = document.getElementById('hero-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let W, H, dots = [];
+    function resize() { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight; }
+    function initDots() {
+      dots = [];
+      const count = Math.min(60, Math.floor((W * H) / 18000));
+      for (let i = 0; i < count; i++) {
+        dots.push({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - 0.5) * 0.18, vy: (Math.random() - 0.5) * 0.18, r: Math.random() * 1.2 + 0.4 });
+      }
+    }
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      for (let i = 0; i < dots.length; i++) {
+        for (let j = i + 1; j < dots.length; j++) {
+          const dx = dots[i].x - dots[j].x, dy = dots[i].y - dots[j].y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          if (dist < 150) {
+            ctx.beginPath(); ctx.moveTo(dots[i].x, dots[i].y); ctx.lineTo(dots[j].x, dots[j].y);
+            ctx.strokeStyle = `rgba(255,255,255,${(1 - dist/150) * 0.12})`; ctx.lineWidth = 0.6; ctx.stroke();
+          }
+        }
+      }
+      for (const d of dots) {
+        ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, Math.PI*2);
+        ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.fill();
+        d.x += d.vx; d.y += d.vy;
+        if (d.x < 0 || d.x > W) d.vx *= -1;
+        if (d.y < 0 || d.y > H) d.vy *= -1;
+      }
+      requestAnimationFrame(draw);
+    }
+    resize(); initDots(); draw();
+    window.addEventListener('resize', () => { resize(); initDots(); });
+  })();
+
+  // Voices scroll
+  (function() {
+    const track = document.getElementById('voices-track');
+    const prev = document.getElementById('voices-prev');
+    const next = document.getElementById('voices-next');
+    if (!track || !prev || !next) return;
+    const amount = () => { const c = track.querySelector('.voice'); return c ? c.getBoundingClientRect().width : track.clientWidth * 0.8; };
+    next.addEventListener('click', () => track.scrollBy({ left: amount(), behavior: 'smooth' }));
+    prev.addEventListener('click', () => track.scrollBy({ left: -amount(), behavior: 'smooth' }));
+  })();
+
+  // Case study carousel
+  function formatNum(str) {
+    return str.replace(/([^\d.,]+)$/, '<span class="accent-color">$1</span>');
+  }
+
+  let activeIdx = 0;
+  function renderCase(idx) {
+    const cs = caseStudiesData[idx];
+    const hasPage = cs.hasPage;
+    const titleHtml = hasPage
+      ? `<a href="/case-studies/${cs.slug}" class="cs-title-link"><h3 class="cs-title">${cs.title}</h3></a>`
+      : `<h3 class="cs-title">${cs.title}</h3>`;
+    const ctaHtml = hasPage
+      ? `<a href="/case-studies/${cs.slug}" class="btn btn-primary" style="align-self:flex-start;">Read the case study <span class="arrow">→</span></a>`
+      : `<a href="#contact" class="btn btn-primary" style="align-self:flex-start;">Discuss this project <span class="arrow">→</span></a>`;
+    const visualHtml = hasPage
+      ? `<a href="/case-studies/${cs.slug}" class="cs-visual cs-visual-link" aria-label="Read ${cs.title} case study">${cs.visualSvg}</a>`
+      : `<div class="cs-visual">${cs.visualSvg}</div>`;
+    document.getElementById('cs-featured').innerHTML = `
+      ${visualHtml}
+      <div class="cs-body">
+        <div class="cs-tag">${cs.tag}</div>
+        ${titleHtml}
+        <p class="cs-desc">${cs.description}</p>
+        <div class="cs-stats">
+          ${cs.stats.map(s => `<div class="cs-stat"><div class="cs-stat-num">${formatNum(s.num)}</div><div class="cs-stat-label">${s.label}</div></div>`).join('')}
+        </div>
+        ${ctaHtml}
+      </div>`;
+    const dotsEl = document.getElementById('cs-dots');
+    dotsEl.innerHTML = caseStudiesData.map((_, i) =>
+      `<button class="cs-dot ${i===idx?'active':''}" data-i="${i}" aria-label="Case study ${i+1}"></button>`
+    ).join('');
+    dotsEl.querySelectorAll('[data-i]').forEach(el => {
+      el.addEventListener('click', () => { activeIdx = parseInt(el.dataset.i); renderCase(activeIdx); });
+    });
+  }
+  document.getElementById('cs-prev').addEventListener('click', () => { activeIdx = (activeIdx - 1 + caseStudiesData.length) % caseStudiesData.length; renderCase(activeIdx); });
+  document.getElementById('cs-next').addEventListener('click', () => { activeIdx = (activeIdx + 1) % caseStudiesData.length; renderCase(activeIdx); });
+  renderCase(0);
+
+  // Contact form
+  document.getElementById('contact-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    this.style.display = 'none';
+    document.getElementById('form-success').classList.add('visible');
+  });
+</script>
+
+</BaseLayout>

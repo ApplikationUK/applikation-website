@@ -1,0 +1,90 @@
+---
+import '../styles/global.css';
+
+export interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description = 'Growth & Innovation Partner — embedded, practical, results-driven.' } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+</head>
+<body>
+
+<nav id="main-nav" class="scrolled">
+  <a href="/" class="nav-logo">
+    <img src="/uploads/Icon.png" alt="" class="logo-icon" width="28" height="28" />
+    <span>Applikation</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/#services">Services</a></li>
+    <li><a href="/#work">Work</a></li>
+    <li><a href="/#process">Process</a></li>
+    <li><a href="/#about">About</a></li>
+    <li><a href="/#contact" class="nav-cta">Let's talk →</a></li>
+  </ul>
+</nav>
+
+<slot />
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="/" class="footer-logo">
+          <img src="/uploads/Logowhite.png" alt="Applikation" />
+        </a>
+        <p class="footer-tagline">Growth &amp; Innovation Partner — embedded, practical, results-driven.</p>
+        <span class="footer-status"><span class="dot"></span> Booking Q3 · 2026</span>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">// Services</div>
+        <a href="/#services">AI Strategy</a>
+        <a href="/#services">Product Development</a>
+        <a href="/#services">Development Innovation</a>
+        <a href="/#services">Process Automation</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">// Company</div>
+        <a href="/#about">About</a>
+        <a href="/#work">Work</a>
+        <a href="/#process">Process</a>
+        <a href="/#contact">Contact</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">// Locations</div>
+        <a href="#">Isle of Man — IM1 1JA</a>
+        <a href="#">Manchester — M1 7JR</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Applikation Limited</span>
+      <span>Made with care in the UK</span>
+    </div>
+  </div>
+</footer>
+
+<script src="/image-slot.js" is:inline></script>
+<script>
+  const nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', () => {
+    nav?.classList.add('scrolled');
+  });
+
+  (function() {
+    const logos = ['Annabel Karmel','ProvaRISK','Total Active Hub','Bioscore','Locus Security','Wellspace','Value for Venues','Optimise Your Marketing','Chlikk','Pocket Inspector','Olivier Mythodrama','Karmel & Co'];
+    const track = document.getElementById('logo-track');
+    if (!track) return;
+    const double = [...logos, ...logos];
+    track.innerHTML = double.map(name => `<div class="logo-item">${name}</div>`).join('');
+  })();
+</script>
+
+</body>
+</html>

@@ -1,24 +1,90 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { sanityClient } from '../../sanity/client';
+import { ALL_BLOG_SLUGS_QUERY, BLOG_POST_BY_SLUG_QUERY } from '../../sanity/queries';
+import { toHTML } from '@portabletext/to-html';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
-  return posts.map(post => ({
+  // Try Sanity slugs first
+  let sanitySlugs: { slug: string }[] = [];
+  try {
+    sanitySlugs = await sanityClient.fetch(ALL_BLOG_SLUGS_QUERY);
+  } catch {}
+
+  const localPosts = await getCollection('blog');
+  const localSlugMap = new Map(localPosts.map(p => [p.slug, p]));
+
+  if (sanitySlugs.length > 0) {
+    return sanitySlugs.map(({ slug }) => ({
+      params: { slug },
+      props: { sanitySlug: slug, localPost: localSlugMap.get(slug) ?? null },
+    }));
+  }
+
+  // Fall back entirely to local content collection
+  return localPosts.map(post => ({
     params: { slug: post.slug },
-    props: { post },
+    props: { sanitySlug: null, localPost: post },
   }));
 }
 
-const { post } = Astro.props;
-const { Content } = await post.render();
+const { sanitySlug, localPost } = Astro.props as {
+  sanitySlug: string | null;
+  localPost: CollectionEntry<'blog'> | null;
+};
+
+let title = '';
+let category = '';
+let excerpt = '';
+let author = '';
+let pubDate: Date = new Date();
+let readTime = '';
+let bodyHtml = '';
+let Content: any = null;
+
+if (sanitySlug) {
+  let post: any = null;
+  try {
+    post = await sanityClient.fetch(BLOG_POST_BY_SLUG_QUERY, { slug: sanitySlug });
+  } catch {}
+
+  if (post) {
+    title = post.title;
+    category = post.category ?? '';
+    excerpt = post.excerpt ?? '';
+    author = post.author ?? '';
+    pubDate = post.pubDate ? new Date(post.pubDate) : new Date();
+    readTime = post.readTime ?? '';
+    bodyHtml = post.body ? toHTML(post.body) : '';
+  } else if (localPost) {
+    // Sanity returned empty, use local as fallback
+    const rendered = await localPost.render();
+    Content = rendered.Content;
+    title = localPost.data.title;
+    category = localPost.data.category;
+    excerpt = localPost.data.excerpt;
+    author = localPost.data.author;
+    pubDate = localPost.data.pubDate;
+    readTime = String(localPost.data.readTime);
+  }
+} else if (localPost) {
+  const rendered = await localPost.render();
+  Content = rendered.Content;
+  title = localPost.data.title;
+  category = localPost.data.category;
+  excerpt = localPost.data.excerpt;
+  author = localPost.data.author;
+  pubDate = localPost.data.pubDate;
+  readTime = String(localPost.data.readTime);
+}
 
 function formatDate(d: Date) {
   return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 }
 ---
 
-<BaseLayout title={`${post.data.title} — Applikation`} description={post.data.excerpt}>
+<BaseLayout title={`${title} — Applikation`} description={excerpt}>
 
 <!-- Article hero -->
 <div style="padding-top:92px; background:var(--ink); color:#fff; border-bottom:1px solid rgba(255,255,255,0.06);">
@@ -26,15 +92,15 @@ function formatDate(d: Date) {
     <a href="/blog" class="crumb" style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.5);text-decoration:none;margin-bottom:36px;transition:color 0.18s;">
       <span>←</span> All Insights
     </a>
-    <div class="insight-cat" style="margin-bottom:20px;">// {post.data.category}</div>
-    <h1 style="font-family:'DM Sans',sans-serif;font-size:clamp(36px,5vw,64px);font-weight:700;letter-spacing:-0.04em;line-height:1.05;color:#fff;margin-bottom:24px;">{post.data.title}</h1>
-    <p style="font-size:18px;line-height:1.6;color:rgba(255,255,255,0.6);max-width:640px;margin-bottom:40px;">{post.data.excerpt}</p>
+    <div class="insight-cat" style="margin-bottom:20px;">// {category}</div>
+    <h1 style="font-family:'DM Sans',sans-serif;font-size:clamp(36px,5vw,64px);font-weight:700;letter-spacing:-0.04em;line-height:1.05;color:#fff;margin-bottom:24px;">{title}</h1>
+    <p style="font-size:18px;line-height:1.6;color:rgba(255,255,255,0.6);max-width:640px;margin-bottom:40px;">{excerpt}</p>
     <div style="display:flex;align-items:center;gap:16px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.45);">
-      <span>{post.data.author}</span>
+      <span>{author}</span>
       <span style="width:3px;height:3px;border-radius:50%;background:currentColor;"></span>
-      <span>{formatDate(post.data.pubDate)}</span>
+      <span>{formatDate(pubDate)}</span>
       <span style="width:3px;height:3px;border-radius:50%;background:currentColor;"></span>
-      <span>{post.data.readTime} min read</span>
+      <span>{readTime} min read</span>
     </div>
   </div>
 </div>
@@ -42,7 +108,7 @@ function formatDate(d: Date) {
 <!-- Article body -->
 <div style="background:var(--canvas); padding:80px 0 120px;">
   <div class="blog-body" style="max-width:740px; margin:0 auto; padding:0 48px;">
-    <Content />
+    {bodyHtml ? <Fragment set:html={bodyHtml} /> : Content ? <Content /> : null}
   </div>
 </div>
 

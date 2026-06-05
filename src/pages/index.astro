@@ -2,24 +2,53 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import { caseStudyVisuals } from '../data/caseStudyVisuals';
+import { safeFetch } from '../sanity/client';
+import { CASE_STUDIES_QUERY, ALL_BLOG_POSTS_QUERY } from '../sanity/queries';
 
-const allCaseStudies = await getCollection('case-studies');
-const caseStudies = allCaseStudies
-  .sort((a, b) => a.data.order - b.data.order)
-  .map(cs => ({
+// Try Sanity for case studies, fall back to content collection
+const sanityCaseStudies = await safeFetch<any[]>(CASE_STUDIES_QUERY, []);
+let caseStudies: any[];
+if (sanityCaseStudies.length > 0) {
+  caseStudies = sanityCaseStudies.map(cs => ({
     slug: cs.slug,
-    tag: cs.data.tag,
-    title: cs.data.title,
-    description: cs.data.description,
-    stats: cs.data.stats,
-    hasPage: cs.data.hasPage,
+    tag: cs.tag,
+    title: cs.title,
+    description: cs.description,
+    stats: cs.stats ?? [],
+    hasPage: cs.hasPage ?? false,
     visualSvg: caseStudyVisuals[cs.slug] ?? '',
   }));
+} else {
+  const allCaseStudies = await getCollection('case-studies');
+  caseStudies = allCaseStudies
+    .sort((a, b) => a.data.order - b.data.order)
+    .map(cs => ({
+      slug: cs.slug,
+      tag: cs.data.tag,
+      title: cs.data.title,
+      description: cs.data.description,
+      stats: cs.data.stats,
+      hasPage: cs.data.hasPage,
+      visualSvg: caseStudyVisuals[cs.slug] ?? '',
+    }));
+}
 
-const allBlogPosts = await getCollection('blog');
-const blogPosts = allBlogPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-const featuredPost = blogPosts.find(p => p.data.featured) ?? blogPosts[0];
-const sidebarPosts = blogPosts.filter(p => p.slug !== featuredPost.slug).slice(0, 3);
+// Try Sanity for blog posts, fall back to content collection
+const sanityBlogPosts = await safeFetch<any[]>(ALL_BLOG_POSTS_QUERY, []);
+let featuredPost: any, sidebarPosts: any[];
+if (sanityBlogPosts.length > 0) {
+  const featured = sanityBlogPosts.find((p: any) => p.featured) ?? sanityBlogPosts[0];
+  featuredPost = { slug: featured.slug, data: { ...featured, pubDate: new Date(featured.pubDate) } };
+  sidebarPosts = sanityBlogPosts
+    .filter((p: any) => p.slug !== featured.slug)
+    .slice(0, 3)
+    .map((p: any) => ({ slug: p.slug, data: { ...p, pubDate: new Date(p.pubDate) } }));
+} else {
+  const allBlogPosts = await getCollection('blog');
+  const blogPosts = allBlogPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+  featuredPost = blogPosts.find(p => p.data.featured) ?? blogPosts[0];
+  sidebarPosts = blogPosts.filter(p => p.slug !== featuredPost.slug).slice(0, 3);
+}
 
 function formatDate(d: Date) {
   return d.toLocaleDateString('en-GB', { month: '2-digit', year: 'numeric' }).replace('/', ' / ');

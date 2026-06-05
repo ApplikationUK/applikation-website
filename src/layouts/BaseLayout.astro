@@ -1,11 +1,29 @@
 ---
 import '../styles/global.css';
+import { safeFetch } from '../sanity/client';
+import { SITE_SETTINGS_QUERY } from '../sanity/queries';
 
 export interface Props {
   title: string;
   description?: string;
 }
 const { title, description = 'Growth & Innovation Partner — embedded, practical, results-driven.' } = Astro.props;
+
+const settings = await safeFetch<any>(SITE_SETTINGS_QUERY, null);
+
+const navLinks = settings?.navLinks ?? [
+  { label: 'Services', href: '/#services', isCta: false },
+  { label: 'Work', href: '/#work', isCta: false },
+  { label: 'Process', href: '/#process', isCta: false },
+  { label: 'About', href: '/#about', isCta: false },
+  { label: "Let's talk →", href: '/#contact', isCta: true },
+];
+
+const footerTagline = settings?.footerTagline ?? 'Growth & Innovation Partner — embedded, practical, results-driven.';
+const footerBookingStatus = settings?.footerBookingStatus ?? 'Booking Q3 · 2026';
+const footerLocations = settings?.footerLocations ?? ['Isle of Man — IM1 1JA', 'Manchester — M1 7JR'];
+const copyrightText = settings?.copyrightText ?? '© 2026 Applikation Limited';
+const logoCarousel = settings?.logoCarousel ?? ['Annabel Karmel','ProvaRISK','Total Active Hub','Bioscore','Locus Security','Wellspace','Value for Venues','Optimise Your Marketing','Chlikk','Pocket Inspector','Olivier Mythodrama','Karmel & Co'];
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -22,11 +40,13 @@ const { title, description = 'Growth & Innovation Partner — embedded, practica
     <img src="/uploads/Logowhite.png" alt="Applikation" class="logo-wordmark" />
   </a>
   <ul class="nav-links">
-    <li><a href="/#services">Services</a></li>
-    <li><a href="/#work">Work</a></li>
-    <li><a href="/#process">Process</a></li>
-    <li><a href="/#about">About</a></li>
-    <li><a href="/#contact" class="nav-cta">Let's talk →</a></li>
+    {navLinks.map((link: any) => (
+      <li>
+        <a href={link.href} class={link.isCta ? 'nav-cta' : ''}>
+          {link.label}
+        </a>
+      </li>
+    ))}
   </ul>
 </nav>
 
@@ -39,8 +59,8 @@ const { title, description = 'Growth & Innovation Partner — embedded, practica
         <a href="/" class="footer-logo">
           <img src="/uploads/Logowhite.png" alt="Applikation" />
         </a>
-        <p class="footer-tagline">Growth &amp; Innovation Partner — embedded, practical, results-driven.</p>
-        <span class="footer-status"><span class="dot"></span> Booking Q3 · 2026</span>
+        <p class="footer-tagline">{footerTagline}</p>
+        <span class="footer-status"><span class="dot"></span> {footerBookingStatus}</span>
       </div>
       <div class="footer-col">
         <div class="footer-col-title">// Services</div>
@@ -58,12 +78,13 @@ const { title, description = 'Growth & Innovation Partner — embedded, practica
       </div>
       <div class="footer-col">
         <div class="footer-col-title">// Locations</div>
-        <a href="#">Isle of Man — IM1 1JA</a>
-        <a href="#">Manchester — M1 7JR</a>
+        {footerLocations.map((loc: string) => (
+          <a href="#">{loc}</a>
+        ))}
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 Applikation Limited</span>
+      <span>{copyrightText}</span>
       <span>Made with care in the UK</span>
     </div>
   </div>
@@ -75,12 +96,12 @@ const { title, description = 'Growth & Innovation Partner — embedded, practica
   window.addEventListener('scroll', () => {
     nav?.classList.add('scrolled');
   });
-
+</script>
+<script define:vars={{ logoCarousel }}>
   (function() {
-    const logos = ['Annabel Karmel','ProvaRISK','Total Active Hub','Bioscore','Locus Security','Wellspace','Value for Venues','Optimise Your Marketing','Chlikk','Pocket Inspector','Olivier Mythodrama','Karmel & Co'];
     const track = document.getElementById('logo-track');
     if (!track) return;
-    const double = [...logos, ...logos];
+    const double = [...logoCarousel, ...logoCarousel];
     track.innerHTML = double.map(name => `<div class="logo-item">${name}</div>`).join('');
   })();
 </script>

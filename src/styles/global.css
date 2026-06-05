@@ -103,12 +103,8 @@ nav.scrolled {
   backdrop-filter: blur(14px) saturate(140%);
   border-bottom-color: rgba(255,255,255,0.06);
 }
-.nav-logo {
-  font-family: 'DM Sans', sans-serif; font-weight: 800; font-size: 18px;
-  letter-spacing: -0.04em; color: #fff; text-decoration: none;
-  display: flex; align-items: center; gap: 10px;
-}
-.nav-logo .logo-icon { width: 28px; height: 28px; object-fit: contain; display: block; }
+.nav-logo { color: #fff; text-decoration: none; display: flex; align-items: center; }
+.nav-logo .logo-wordmark { height: 22px; width: auto; object-fit: contain; display: block; }
 .nav-links { display: flex; align-items: center; gap: 40px; list-style: none; }
 .nav-links a { text-decoration: none; color: rgba(255,255,255,0.7); font-size: 13px; font-weight: 500; transition: color 0.18s; }
 .nav-links a:hover { color: #fff; }

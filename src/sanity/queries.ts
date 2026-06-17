@@ -7,7 +7,10 @@ export const SITE_SETTINGS_QUERY = `*[_type == "siteSettings"][0]{
   footerBookingStatus,
   footerLocations,
   copyrightText,
-  logoCarousel
+  logoCarousel[] {
+    name,
+    "logoUrl": logo.asset->url
+  }
 }`;
 
 export const HOMEPAGE_QUERY = `*[_type == "homepageContent"][0]{

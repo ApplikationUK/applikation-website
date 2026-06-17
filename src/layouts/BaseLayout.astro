@@ -23,7 +23,11 @@ const footerTagline = settings?.footerTagline ?? 'Growth & Innovation Partner �
 const footerBookingStatus = settings?.footerBookingStatus ?? 'Booking Q3 · 2026';
 const footerLocations = settings?.footerLocations ?? ['Isle of Man — IM1 1JA', 'Manchester — M1 7JR'];
 const copyrightText = settings?.copyrightText ?? '© 2026 Applikation Limited';
-const logoCarousel = settings?.logoCarousel ?? ['Annabel Karmel','ProvaRISK','Total Active Hub','Bioscore','Locus Security','Wellspace','Value for Venues','Optimise Your Marketing','Chlikk','Pocket Inspector','Olivier Mythodrama','Karmel & Co'];
+const rawCarousel = settings?.logoCarousel ?? null;
+const logoCarousel: { name: string; logoUrl: string | null }[] = rawCarousel
+  ? rawCarousel
+  : ['Annabel Karmel','ProvaRISK','Total Active Hub','Bioscore','Locus Security','Wellspace','Value for Venues','Optimise Your Marketing','Chlikk','Pocket Inspector','Olivier Mythodrama','Karmel & Co']
+      .map(name => ({ name, logoUrl: null }));
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -102,7 +106,12 @@ const logoCarousel = settings?.logoCarousel ?? ['Annabel Karmel','ProvaRISK','To
     const track = document.getElementById('logo-track');
     if (!track) return;
     const double = [...logoCarousel, ...logoCarousel];
-    track.innerHTML = double.map(name => `<div class="logo-item">${name}</div>`).join('');
+    track.innerHTML = double.map(item => {
+      if (item.logoUrl) {
+        return `<div class="logo-item"><img src="${item.logoUrl}" alt="${item.name}" class="logo-item-img" /></div>`;
+      }
+      return `<div class="logo-item">${item.name}</div>`;
+    }).join('');
   })();
 </script>
 

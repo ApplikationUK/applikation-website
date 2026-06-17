@@ -58,9 +58,20 @@ export const siteSettings = {
     },
     {
       name: 'logoCarousel',
-      title: 'Logo Carousel (client names)',
+      title: 'Logo Carousel',
       type: 'array',
-      of: [{ type: 'string' }],
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'name', title: 'Client Name', type: 'string' },
+            { name: 'logo', title: 'Logo Image (white/transparent PNG)', type: 'image' },
+          ],
+          preview: {
+            select: { title: 'name', media: 'logo' },
+          },
+        },
+      ],
     },
   ],
 };

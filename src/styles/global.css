@@ -222,7 +222,7 @@ nav.scrolled {
   letter-spacing: -0.01em; color: rgba(255,255,255,0.4); transition: color 0.2s;
 }
 .logo-item:hover { color: #fff; }
-.logo-item-img { height: 28px; width: auto; max-width: 140px; object-fit: contain; opacity: 0.45; transition: opacity 0.2s; filter: brightness(0) invert(1); }
+.logo-item-img { height: 40px; width: auto; max-width: 160px; object-fit: contain; opacity: 0.45; transition: opacity 0.2s; filter: brightness(0) invert(1); }
 .logo-item:hover .logo-item-img { opacity: 0.9; }
 
 /* ── Voices ── */

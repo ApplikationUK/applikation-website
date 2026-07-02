@@ -105,10 +105,11 @@ const logoCarousel: { name: string; logoUrl: string | null }[] = rawCarousel
   (function() {
     const track = document.getElementById('logo-track');
     if (!track) return;
-    const double = [...logoCarousel, ...logoCarousel];
+    const valid = logoCarousel.filter(item => item.logoUrl || item.name);
+    const double = [...valid, ...valid];
     track.innerHTML = double.map(item => {
       if (item.logoUrl) {
-        return `<div class="logo-item"><img src="${item.logoUrl}" alt="${item.name}" class="logo-item-img" /></div>`;
+        return `<div class="logo-item"><img src="${item.logoUrl}" alt="${item.name || ''}" class="logo-item-img" /></div>`;
       }
       return `<div class="logo-item">${item.name}</div>`;
     }).join('');
